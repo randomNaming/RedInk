@@ -74,3 +74,14 @@ htmlcov/
 *.temp
 test_*.py
 debug_*.py
+
+# SSL Certificates and sensitive nginx config
+nginx/ssl/
+nginx/conf.d/default.conf
+nginx/html/.well-known/
+
+# Deployment scripts generated files
+renew-cert.sh
+
+# Output directory
+output/
