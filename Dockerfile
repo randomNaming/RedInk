@@ -28,12 +28,12 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# 安装系统依赖
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+# 安装 curl（用于下载 uv）
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-# 安装 uv
-RUN pip install --no-cache-dir uv
+# 安装 uv（直接下载二进制）
+RUN curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz | tar -xz && \
+    mv uv /usr/local/bin/uv && chmod +x /usr/local/bin/uv
 
 # 复制 Python 项目配置
 COPY pyproject.toml uv.lock* ./
