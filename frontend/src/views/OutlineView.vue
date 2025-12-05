@@ -133,6 +133,13 @@ const startGeneration = () => {
 </script>
 
 <style scoped>
+/* 页面头部基础布局 */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 /* 网格布局 */
 .outline-grid {
   display: grid;
@@ -283,5 +290,129 @@ const startGeneration = () => {
   font-size: 32px;
   font-weight: 300;
   margin-bottom: 8px;
+}
+
+/* ========== 移动端适配 ========== */
+@media (max-width: 768px) {
+  /* 页面头部 - 改为垂直布局 */
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 16px;
+    margin-bottom: 20px !important;
+  }
+
+  .page-header > div:first-child {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 24px !important;
+    margin-bottom: 4px;
+  }
+
+  .page-subtitle {
+    font-size: 14px !important;
+  }
+
+  /* 按钮容器 - 全宽度 */
+  .page-header > div:last-child {
+    width: 100%;
+    flex-direction: row;
+  }
+
+  .page-header .btn {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    justify-content: center;
+  }
+
+  .page-header .btn svg {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+  }
+
+  /* 网格布局 - 单列 */
+  .outline-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  /* 卡片优化 */
+  .outline-card {
+    min-height: 280px;
+    padding: 14px;
+  }
+
+  .card-top-bar {
+    margin-bottom: 10px;
+  }
+
+  .page-number {
+    font-size: 13px;
+  }
+
+  .page-type {
+    font-size: 10px;
+    padding: 2px 5px;
+  }
+
+  /* 文本区域 */
+  .textarea-paper {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* 添加卡片 */
+  .add-card-dashed {
+    min-height: 140px;
+  }
+
+  .add-icon {
+    font-size: 28px;
+  }
+
+  .add-content span {
+    font-size: 14px;
+  }
+
+  /* 控制按钮始终可见（移动端不需要 hover） */
+  .card-controls {
+    opacity: 1;
+  }
+}
+
+/* 小屏手机优化 */
+@media (max-width: 414px) {
+  .container {
+    padding: 0 !important;
+  }
+
+  .page-header {
+    padding: 0 12px;
+  }
+
+  .outline-grid {
+    padding: 0 12px;
+    gap: 12px;
+  }
+
+  .page-header .btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .page-header .btn-primary {
+    white-space: nowrap;
+  }
+
+  /* 按钮文字优化 */
+  .page-header .btn-primary svg {
+    margin-right: 2px;
+  }
 }
 </style>
