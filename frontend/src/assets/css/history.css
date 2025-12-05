@@ -276,3 +276,141 @@
   width: 100%;
   border-radius: 8px;
 }
+
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+  /* Stats Overview 移动端调整 */
+  .stats-overview {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-box {
+    padding: 16px;
+  }
+
+  .stat-icon-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .stat-content .number {
+    font-size: 24px;
+  }
+
+  /* Toolbar 移动端调整 */
+  .toolbar-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .search-mini {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  /* Gallery Grid 移动端调整 */
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .gallery-card {
+    border-radius: 10px;
+  }
+
+  .card-footer {
+    padding: 12px;
+  }
+
+  .card-title {
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  .card-meta {
+    font-size: 11px;
+  }
+
+  /* Status Badge 移动端调整 */
+  .status-badge {
+    top: 8px;
+    left: 8px;
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  /* Pagination 移动端调整 */
+  .pagination-wrapper {
+    margin-top: 24px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .page-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  /* Empty State 移动端调整 */
+  .empty-state-large {
+    padding: 60px 20px;
+  }
+
+  .empty-img {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  /* Modal Gallery Grid 移动端调整 */
+  .modal-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+}
+
+/* 小屏手机 (≤480px) */
+@media (max-width: 480px) {
+  .stats-overview {
+    gap: 10px;
+  }
+
+  .stat-box {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .stat-icon-circle {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .stat-content h4 {
+    font-size: 12px;
+  }
+
+  .stat-content .number {
+    font-size: 20px;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card-title {
+    font-size: 13px;
+  }
+
+  .modal-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

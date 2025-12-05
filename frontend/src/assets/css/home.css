@@ -462,6 +462,277 @@
   }
 }
 
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+  /* Hero Section 移动端调整 */
+  .hero-section {
+    margin-bottom: 32px;
+    padding: 24px 16px;
+  }
+
+  .hero-content {
+    margin-bottom: 24px;
+  }
+
+  .brand-pill {
+    font-size: 12px;
+    padding: 5px 12px;
+    margin-bottom: 16px;
+  }
+
+  .platform-slogan {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Composer 移动端调整 */
+  .composer-container {
+    padding: 16px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+  }
+
+  .composer-input-wrapper {
+    gap: 8px;
+  }
+
+  .search-icon-static {
+    padding-top: 6px;
+  }
+
+  .search-icon-static svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .composer-textarea {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+    min-height: 48px;
+    padding: 6px 0;
+  }
+
+  .composer-toolbar {
+    padding-top: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .toolbar-left {
+    gap: 12px;
+  }
+
+  .tool-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tool-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .generate-btn {
+    padding: 10px 24px;
+    height: 40px;
+    font-size: 14px;
+    flex: 1;
+    min-width: 120px;
+  }
+
+  /* 已上传图片预览移动端调整 */
+  .uploaded-images-preview {
+    padding: 10px;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .uploaded-image-item {
+    width: 50px;
+    height: 50px;
+  }
+
+  .upload-hint {
+    font-size: 11px;
+    text-align: left;
+  }
+
+  /* 场景卡片移动端调整 */
+  .scenarios-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .scenario-card {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+
+  .scenario-icon-box {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .scenario-icon-box svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .scenario-title {
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+
+  .scenario-desc {
+    font-size: 11px;
+  }
+
+  /* Dashboard Grid 移动端调整 - 垂直排列 */
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+    display: grid;
+  }
+
+  .feature-card {
+    padding: 20px;
+    min-height: auto;
+    width: 100%;
+  }
+
+  .card-header {
+    margin-bottom: 16px;
+  }
+
+  .section-title-sm {
+    font-size: 15px;
+  }
+
+  .icon-box {
+    width: 32px;
+    height: 32px;
+  }
+
+  .icon-box svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* Recent List 移动端调整 */
+  .recent-list {
+    gap: 8px;
+  }
+
+  .recent-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .recent-thumbnail {
+    width: 32px;
+    height: 42px;
+  }
+
+  .recent-title {
+    font-size: 14px;
+  }
+
+  .recent-date {
+    font-size: 11px;
+  }
+
+  .recent-arrow {
+    font-size: 16px;
+  }
+
+  /* Trend List 移动端调整 */
+  .trend-list {
+    gap: 6px;
+  }
+
+  .trend-item {
+    padding: 8px 10px;
+  }
+
+  .trend-rank {
+    width: 20px;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .trend-name {
+    font-size: 13px;
+  }
+
+  .trend-hot {
+    font-size: 11px;
+  }
+
+  .empty-state-mini {
+    min-height: 100px;
+    font-size: 13px;
+  }
+
+  /* 展示背景网格移动端调整 */
+  .showcase-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .home-container {
+    padding-top: 0;
+  }
+}
+
+/* 小屏手机 (≤480px) */
+@media (max-width: 480px) {
+  .hero-section {
+    padding: 20px 12px;
+  }
+
+  .composer-container {
+    padding: 12px;
+  }
+
+  .composer-textarea {
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+
+  .generate-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .scenarios-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+  }
+
+  .feature-card {
+    padding: 16px;
+  }
+
+  .showcase-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+
+  .recent-item {
+    padding: 10px;
+  }
+
+  .trend-item {
+    padding: 8px;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }

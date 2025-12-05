@@ -20,6 +20,52 @@ body {
   width: 100%;
 }
 
+/* 移动端菜单按钮 */
+.mobile-menu-btn {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1001;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: white;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-main);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover {
+  background: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-menu-btn:active {
+  transform: scale(0.95);
+}
+
+/* 移动端遮罩层 */
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 /* 布局组件类 */
 .layout-sidebar {
   width: var(--sidebar-width);
@@ -32,8 +78,10 @@ body {
   padding: 32px 24px;
   display: flex;
   flex-direction: column;
-  z-index: 100;
-  transition: all 0.3s ease;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .layout-main {
@@ -44,6 +92,7 @@ body {
   background: linear-gradient(135deg, #FAFAFA 0%, #F4F5F7 100%);
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
 }
 
 /* Logo 区域 */
@@ -190,4 +239,256 @@ body {
 .footer-license a:hover {
   color: var(--primary);
   text-decoration: underline;
+}
+
+/* ============================================
+   响应式设计 - 移动端适配
+   ============================================ */
+
+/* 平板设备 (≤1024px) */
+@media (max-width: 1024px) {
+  .layout-main {
+    padding: 32px 40px;
+  }
+
+  .page-title {
+    font-size: 32px;
+  }
+
+  .page-subtitle {
+    font-size: 16px;
+  }
+}
+
+/* 移动设备 (≤768px) */
+@media (max-width: 768px) {
+  /* 显示移动端菜单按钮 */
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  /* 显示遮罩层 */
+  .mobile-overlay {
+    display: block;
+  }
+
+  /* 侧边栏在移动端默认隐藏，从左侧滑出 */
+  .layout-sidebar {
+    width: 280px;
+    left: -280px;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .layout-sidebar.mobile-open {
+    left: 0;
+  }
+
+  /* 主内容区在移动端占满全宽 */
+  .layout-main {
+    margin-left: 0;
+    padding: 20px 16px;
+    padding-top: 72px; /* 为移动端菜单按钮留出空间 */
+  }
+
+  /* Logo 区域调整 */
+  .logo-area {
+    margin-bottom: 32px;
+    padding-left: 4px;
+  }
+
+  .logo-text {
+    font-size: 20px;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* 导航菜单调整 */
+  .nav-menu {
+    gap: 6px;
+  }
+
+  .nav-item {
+    padding: 12px 16px;
+    font-size: 14px;
+    gap: 12px;
+  }
+
+  .nav-item svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* 页面标题调整 */
+  .page-header {
+    margin-bottom: 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .page-subtitle {
+    font-size: 15px;
+  }
+
+  .section-title {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  /* 容器调整 */
+  .container {
+    padding: 0;
+  }
+
+  /* 卡片调整 */
+  .card {
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+  }
+
+  /* 按钮调整 */
+  .btn {
+    padding: 10px 20px;
+    font-size: 15px;
+  }
+
+  /* 全局页脚调整 */
+  .global-footer {
+    margin-top: 40px;
+    padding: 24px 0 20px;
+  }
+
+  .footer-content {
+    gap: 6px;
+  }
+
+  .footer-text {
+    font-size: 13px;
+  }
+
+  .footer-license {
+    font-size: 12px;
+  }
+
+  /* 通用输入框调整 */
+  .input {
+    padding: 16px 24px;
+    font-size: 16px; /* 防止 iOS 自动缩放 */
+  }
+
+  /* 标签云调整 */
+  .tag-cloud {
+    gap: 8px;
+  }
+
+  .tag {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  /* Tabs 调整 */
+  .tabs-container {
+    gap: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tabs-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-item {
+    padding: 10px 2px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  /* 网格布局调整 */
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  /* 图片卡片调整 */
+  .image-card {
+    min-height: 240px;
+  }
+}
+
+/* 小屏手机 (≤480px) */
+@media (max-width: 480px) {
+  .layout-main {
+    padding: 16px 12px;
+    padding-top: 68px;
+  }
+
+  .layout-sidebar {
+    width: 260px;
+    left: -260px;
+    padding: 24px 16px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+  }
+
+  .card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .tag {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 横屏模式优化 */
+@media (max-width: 768px) and (orientation: landscape) {
+  .layout-main {
+    padding-top: 64px;
+  }
+
+  .layout-sidebar {
+    padding: 20px 16px;
+  }
+
+  .logo-area {
+    margin-bottom: 24px;
+  }
+
+  .nav-item {
+    padding: 10px 16px;
+  }
 }

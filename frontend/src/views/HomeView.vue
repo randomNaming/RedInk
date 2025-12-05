@@ -493,6 +493,13 @@ onUnmounted(() => {
   backdrop-filter: blur(10px);
 }
 
+/* 移动端 Hero Section 样式 */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 20px 30px;
+  }
+}
+
 /* Content Section */
 .content-section {
   background: rgba(255, 255, 255, 0.95);
@@ -913,22 +920,7 @@ onUnmounted(() => {
   animation: slideUp 0.3s ease-out;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .showcase-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 12px;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .scenarios-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+/* Responsive - 移动端已在 home.css 中处理 */
 
 /* 首页页脚样式 */
 .home-footer {
@@ -971,5 +963,22 @@ onUnmounted(() => {
 .footer-license-info a:hover {
   color: var(--primary);
   text-decoration: underline;
+}
+
+/* 移动端页脚调整 */
+@media (max-width: 768px) {
+  .home-footer {
+    margin-top: 32px;
+    padding: 24px 0 12px;
+  }
+
+  .footer-copyright {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .footer-license-info {
+    font-size: 12px;
+  }
 }
 </style>
