@@ -435,7 +435,7 @@ body {
 /* 小屏手机 (≤480px) */
 @media (max-width: 480px) {
   .layout-main {
-    padding: 16px 12px;
+    padding: 16px 40px;
     padding-top: 68px;
   }
 

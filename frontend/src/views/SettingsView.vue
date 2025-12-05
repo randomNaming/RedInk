@@ -1197,13 +1197,50 @@ onMounted(() => {
 @media (max-width: 768px) {
   .table-header,
   .table-row {
-    grid-template-columns: 70px 1fr 80px;
+    grid-template-columns: 80px 1fr 100px; /* 增加操作列宽度 */
+    gap: 8px; /* 减少间距避免挤压 */
+    padding: 12px; /* 减少内边距 */
   }
 
   .col-type,
   .col-model,
   .col-apikey {
     display: none;
+  }
+
+  /* 调整按钮样式 */
+  .btn-activate {
+    font-size: 11px;
+    padding: 4px 8px;
+    white-space: nowrap;
+  }
+
+  /* 操作按钮区域优化 */
+  .col-actions {
+    gap: 4px; /* 减少按钮间距 */
+  }
+
+  .btn-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+  }
+
+  .btn-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* 名称列优化 */
+  .provider-name {
+    font-size: 14px;
+    word-break: break-word;
+  }
+
+  /* 头部标题调整 */
+  .table-header {
+    font-size: 11px;
+    padding: 10px 12px;
   }
 
   .modal-overlay {
