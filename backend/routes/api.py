@@ -10,6 +10,7 @@ from flask import Blueprint, request, jsonify, Response, send_file
 from backend.services.outline import get_outline_service
 from backend.services.image import get_image_service
 from backend.services.history import get_history_service
+from backend.middleware import ip_rate_limit
 
 logger = logging.getLogger(__name__)
 
@@ -38,6 +39,7 @@ def _log_error(endpoint: str, error: Exception):
 
 
 @api_bp.route('/outline', methods=['POST'])
+@ip_rate_limit
 def generate_outline():
     """生成大纲（支持图片上传）"""
     start_time = time.time()

@@ -245,6 +245,11 @@ providers:
 2. **生成时间**:
    - 图片生成需要时间,请耐心等待（不要离开页面）
 
+3. **IP访问限制**:
+   - 每个IP地址每天最多可以使用2次（生成大纲）
+   - 限制次数可在 `backend/middleware/rate_limiter.py` 中修改 `DAILY_LIMIT` 常量
+   - 详细说明请参考 [IP_LIMIT_README.md](IP_LIMIT_README.md)
+
 ---
 
 ## 🤝 参与贡献

@@ -383,7 +383,14 @@ const handleGenerate = async () => {
       error.value = result.error || '生成大纲失败'
     }
   } catch (err: any) {
-    error.value = err.message || '网络错误，请重试'
+    // 优先从 response.data 获取后端返回的错误消息
+    if (err.response?.data?.error) {
+      error.value = err.response.data.error
+    } else if (err.response?.status === 429) {
+      error.value = '请求过于频繁，请稍后再试'
+    } else {
+      error.value = err.message || '网络错误，请重试'
+    }
   } finally {
     loading.value = false
   }
