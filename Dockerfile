@@ -31,9 +31,9 @@ WORKDIR /app
 # 安装 curl（用于下载 uv）
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
-# 安装 uv（直接下载二进制）
-RUN curl -LsSf https://github.com/astral-sh/uv/releases/latest/download/uv-x86_64-unknown-linux-gnu.tar.gz | tar -xz && \
-    mv uv /usr/local/bin/uv && chmod +x /usr/local/bin/uv
+# 安装 uv（使用官方安装脚本）
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+    mv /root/.cargo/bin/uv /usr/local/bin/uv
 
 # 复制 Python 项目配置
 COPY pyproject.toml uv.lock* ./
