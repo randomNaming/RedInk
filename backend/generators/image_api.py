@@ -128,36 +128,76 @@ class ImageApiGenerator(ImageGeneratorBase):
             "Content-Type": "application/json"
         }
 
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "response_format": "b64_json",
-            "aspect_ratio": aspect_ratio,
-            "image_size": self.image_size
-        }
-
+        # 根据端点类型选择不同的请求格式
+        # 如果是 302.ai 的新 API (/ws/api/v3/...)，使用新的格式
+        is_302ai_api = '/ws/api/v3' in self.endpoint_type or 'nano-banana-pro' in self.endpoint_type
+        
         # 收集所有参考图片
         all_reference_images = []
         if reference_images and len(reference_images) > 0:
             all_reference_images.extend(reference_images)
         if reference_image and reference_image not in all_reference_images:
             all_reference_images.append(reference_image)
+        
+        if is_302ai_api:
+            # 302.ai nano-banana-pro API 格式
+            # 如果有参考图片，增强提示词（该 API 可能不支持参考图片参数）
+            final_prompt = prompt
+            if all_reference_images:
+                logger.info(f"302.ai API: 使用 {len(all_reference_images)} 张参考图片增强提示词")
+                ref_count = len(all_reference_images)
+                final_prompt = f"""参考以下风格要求，生成一张新图片。
 
-        # 如果有参考图片，添加到 image 数组
-        if all_reference_images:
-            logger.debug(f"  添加 {len(all_reference_images)} 张参考图片")
-            image_uris = []
-            for idx, img_data in enumerate(all_reference_images):
-                compressed_img = compress_image(img_data, max_size_kb=200)
-                logger.debug(f"  参考图 {idx}: {len(img_data)} -> {len(compressed_img)} bytes")
-                base64_image = base64.b64encode(compressed_img).decode('utf-8')
-                data_uri = f"data:image/png;base64,{base64_image}"
-                image_uris.append(data_uri)
+风格描述：参考提供的 {ref_count} 张参考图片的风格（色彩、光影、构图、氛围）。
 
-            payload["image"] = image_uris
+新图片内容：{prompt}
 
-            ref_count = len(all_reference_images)
-            enhanced_prompt = f"""参考提供的 {ref_count} 张图片的风格（色彩、光影、构图、氛围），生成一张新图片。
+要求：
+1. 保持相似的色调和氛围
+2. 使用相似的光影处理
+3. 保持一致的画面质感"""
+            
+            payload = {
+                "prompt": final_prompt,
+                "aspect_ratio": aspect_ratio,
+                "enable_sync_mode": True,
+                "enable_base64_output": True,
+                "output_format": "png"
+            }
+            
+            # 如果有配置分辨率，添加 resolution 参数
+            resolution_map = {
+                '1K': '1k',
+                '2K': '2k',
+                '4K': '4k'
+            }
+            resolution = resolution_map.get(self.image_size.upper(), '2k')
+            payload["resolution"] = resolution
+        else:
+            # OpenAI 兼容格式
+            payload = {
+                "model": model,
+                "prompt": prompt,
+                "response_format": "b64_json",
+                "aspect_ratio": aspect_ratio,
+                "image_size": self.image_size
+            }
+
+            # 如果有参考图片，添加到 image 数组
+            if all_reference_images:
+                logger.debug(f"  添加 {len(all_reference_images)} 张参考图片")
+                image_uris = []
+                for idx, img_data in enumerate(all_reference_images):
+                    compressed_img = compress_image(img_data, max_size_kb=200)
+                    logger.debug(f"  参考图 {idx}: {len(img_data)} -> {len(compressed_img)} bytes")
+                    base64_image = base64.b64encode(compressed_img).decode('utf-8')
+                    data_uri = f"data:image/png;base64,{base64_image}"
+                    image_uris.append(data_uri)
+
+                payload["image"] = image_uris
+
+                ref_count = len(all_reference_images)
+                enhanced_prompt = f"""参考提供的 {ref_count} 张图片的风格（色彩、光影、构图、氛围），生成一张新图片。
 
 新图片内容：{prompt}
 
@@ -166,7 +206,7 @@ class ImageApiGenerator(ImageGeneratorBase):
 2. 使用相似的光影处理
 3. 保持一致的画面质感
 4. 如果参考图中有人物或产品，可以适当融入"""
-            payload["prompt"] = enhanced_prompt
+                payload["prompt"] = enhanced_prompt
 
         api_url = f"{self.base_url}{self.endpoint_type}"
         logger.debug(f"  发送请求到: {api_url}")
@@ -188,9 +228,60 @@ class ImageApiGenerator(ImageGeneratorBase):
             )
 
         result = response.json()
-        logger.debug(f"  API 响应: data 长度={len(result.get('data', []))}")
+        logger.debug(f"  API 响应: {str(result)[:500]}")
 
-        if "data" in result and len(result["data"]) > 0:
+        # 支持 302.ai API 响应格式: {code, message, data: {urls: {get: url}}}
+        if "code" in result and "data" in result:
+            if result.get("code") != 200:
+                error_msg = result.get("message", "未知错误")
+                logger.error(f"302.ai API 返回错误: code={result.get('code')}, message={error_msg}")
+                raise Exception(
+                    f"图片生成失败: {error_msg}\n"
+                    f"错误代码: {result.get('code')}\n"
+                    "可能原因：\n"
+                    "1. API密钥无效或已过期\n"
+                    "2. 请求参数不符合API要求\n"
+                    "3. 配额已用尽\n"
+                    "建议：检查API密钥和配置"
+                )
+            
+            data = result.get("data", {})
+            
+            # 检查是否有 base64 输出
+            if "outputs" in data and len(data["outputs"]) > 0:
+                output = data["outputs"][0]
+                if isinstance(output, str):
+                    # 如果是 base64 字符串
+                    if output.startswith('data:'):
+                        b64_string = output.split(',', 1)[1]
+                    else:
+                        b64_string = output
+                    try:
+                        image_data = base64.b64decode(b64_string)
+                        logger.info(f"✅ Image API 图片生成成功 (base64): {len(image_data)} bytes")
+                        return image_data
+                    except Exception as e:
+                        logger.warning(f"Base64 解码失败: {e}，尝试作为 URL 处理")
+            
+            # 检查是否有 URL 输出
+            if "urls" in data and "get" in data["urls"]:
+                image_url = data["urls"]["get"]
+                logger.info(f"从响应中获取图片 URL: {image_url[:100]}...")
+                return self._download_image(image_url)
+            
+            # 检查 status 字段，如果是处理中或失败
+            status = data.get("status", "")
+            if status and status.lower() in ["processing", "pending", "queued"]:
+                error_msg = data.get("error", "")
+                raise Exception(
+                    f"图片生成任务仍在处理中或失败\n"
+                    f"状态: {status}\n"
+                    f"错误信息: {error_msg if error_msg else '无'}\n"
+                    "建议：稍后重试或检查任务状态"
+                )
+        
+        # 原有的 OpenAI 兼容格式: {data: [{b64_json: ...}]}
+        if "data" in result and isinstance(result["data"], list) and len(result["data"]) > 0:
             item = result["data"][0]
 
             if "b64_json" in item:
@@ -203,14 +294,14 @@ class ImageApiGenerator(ImageGeneratorBase):
                 logger.info(f"✅ Image API 图片生成成功: {len(image_data)} bytes")
                 return image_data
 
-        logger.error(f"无法从响应中提取图片数据: {str(result)[:200]}")
+        logger.error(f"无法从响应中提取图片数据: {str(result)[:500]}")
         raise Exception(
-            f"图片数据提取失败：未找到 b64_json 数据。\n"
+            f"图片数据提取失败：未找到有效的图片数据。\n"
             f"API响应片段: {str(result)[:500]}\n"
             "可能原因：\n"
             "1. API返回格式与预期不符\n"
             "2. response_format 参数未生效\n"
-            "3. 该模型不支持 b64_json 格式\n"
+            "3. 该模型不支持请求的格式\n"
             "建议：检查API文档确认返回格式要求"
         )
 
