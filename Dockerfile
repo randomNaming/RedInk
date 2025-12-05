@@ -28,6 +28,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# 使用国内镜像源加速（阿里云）
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources
+
 # 安装 curl（用于下载 uv）
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
