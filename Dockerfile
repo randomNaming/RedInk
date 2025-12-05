@@ -31,12 +31,11 @@ WORKDIR /app
 # 使用国内镜像源加速（阿里云）
 RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list.d/debian.sources
 
-# 安装 curl（用于下载 uv）
-RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
+# 配置 pip 使用清华大学镜像源
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 
-# 安装 uv（使用官方安装脚本）
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-    mv /root/.local/bin/uv /usr/local/bin/uv
+# 安装 uv（通过 pip，可使用镜像源）
+RUN pip install --no-cache-dir uv
 
 # 复制 Python 项目配置
 COPY pyproject.toml uv.lock* ./
